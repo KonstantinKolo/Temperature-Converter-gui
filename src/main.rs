@@ -14,6 +14,8 @@ fn main() -> Result<(), eframe::Error> {
 
     // Our application state:
     let mut temp_type = String::from("Types of temp:");
+    let mut input_value: i8 = 0;
+    let mut calculate: bool = false;
     
 
     eframe::run_simple_native("Temperature Converter", options, move |ctx, _frame| {
@@ -22,16 +24,26 @@ fn main() -> Result<(), eframe::Error> {
             ui.heading("Simple temperature converter!");
             ui.horizontal(|ui| {
                 egui::ComboBox::from_label("Select one!")
+                .width(110.0)
                 .selected_text(format!("{}",&temp_type))
                 .show_ui(ui, |ui| {
                     ui.selectable_value(&mut temp_type, "Fahrenheit".to_owned(), "Fahrenheit");
                     ui.selectable_value(&mut temp_type, "Celcius".to_owned(), "Celcius");
                     ui.selectable_value(&mut temp_type, "Kelvin".to_owned(), "Kelvin");
-                }
-                );
+                }); 
             });
 
-            ui.label(&temp_type);
+            ui.add(egui::Slider::new(&mut input_value, -120..=120).text("degrees"));
+
+            ui.horizontal(|ui| {
+                if ui.button("Convert").clicked() {
+                    calculate = true;
+                }
+                if calculate == true{
+                    ui.label("Hey");
+                }
+            });
+            ui.label(input_value.to_string());
         });
     })
 }
